@@ -1,0 +1,394 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+export const RightArrow = () => (
+  <svg
+    viewBox="0 0 14 14"
+    width="8px"
+    height="14px"
+    style={{
+      marginLeft: "4px",
+      display: "inline-block",
+      shapeRendering: "inherit",
+      verticalAlign: "middle",
+      fill: "currentColor",
+      "path fill": "currentColor",
+    }}
+  >
+    <path d="m11.1 7.35-5.5 5.5a.5.5 0 0 1-.7-.7L10.04 7 4.9 1.85a.5.5 0 1 1 .7-.7l5.5 5.5c.2.2.2.5 0 .7Z" />
+  </svg>
+);
+
+<Meta title="Welcome to lorenzo_ceglia" />
+
+<div className="sb-container">
+  <div className='sb-section-title'>
+    # Welcome to lorenzo_ceglia
+
+    This is my **personal portfolio website** built as a practical exploration of **spec-driven development** using the **OpenSpec framework** and **OpenCode** automation.
+
+    Rather than building features ad-hoc, this project follows a structured workflow:
+    - **Spec first** — Write detailed proposals and designs using OpenSpec
+    - **Implement with guidance** — Use AI-generated specs to guide development
+    - **Archive decisions** — Keep historical record of why features exist
+    - **Iterate systematically** — Learn from the spec-driven workflow
+
+  </div>
+</div>
+<div className="sb-container">
+  <div className='sb-section-title'>
+    # Tech Stack & Tools
+
+    This project combines modern development practices with a spec-driven workflow:
+
+  </div>
+
+  <div className="sb-section">
+    <div className="sb-features-grid">
+      <div className="sb-grid-item">
+        <h4 className="sb-section-item-heading">React 19 + TypeScript</h4>
+        <p className="sb-section-item-paragraph">Component-driven UI with strong type safety and modern React patterns including Hooks.</p>
+      </div>
+      <div className="sb-grid-item">
+        <h4 className="sb-section-item-heading">Vite</h4>
+        <p className="sb-section-item-paragraph">Lightning-fast development server and build tool with Hot Module Replacement (HMR) for instant feedback.</p>
+      </div>
+      <div className="sb-grid-item">
+        <h4 className="sb-section-item-heading">Tailwind CSS 4.2.2</h4>
+        <p className="sb-section-item-paragraph">Utility-first CSS framework for rapid, consistent styling without leaving your markup.</p>
+      </div>
+      <div className="sb-grid-item">
+        <h4 className="sb-section-item-heading">Storybook 10.3.4</h4>
+        <p className="sb-section-item-paragraph">Component documentation and isolation. Develop and test components independently before integration.</p>
+      </div>
+      <div className="sb-grid-item">
+        <h4 className="sb-section-item-heading">Biome</h4>
+        <p className="sb-section-item-paragraph">Unified linting and formatting (replacing ESLint and Prettier) for consistent code style.</p>
+      </div>
+      <div className="sb-grid-item">
+        <h4 className="sb-section-item-heading">OpenSpec + OpenCode</h4>
+        <p className="sb-section-item-paragraph">Spec-driven development framework with AI-powered automation for proposal, design, and implementation guidance.</p>
+      </div>
+    </div>
+  </div>
+</div>
+<div className='sb-addon'>
+  <div className='sb-addon-text'>
+    <h4>Spec-Driven Workflow</h4>
+    <p className="sb-section-item-paragraph">Component development follows OpenSpec: propose specifications, implement with guidance, archive decisions for reference.</p>
+    <a
+        className="sb-action-link"
+        href="../README.md"
+        target="_blank"
+      >View Project README<RightArrow /></a>
+  </div>
+</div>
+
+<div className="sb-section sb-socials">
+  <div className="sb-section-item">
+    <h4>📋 Getting Started</h4>
+    Run `npm run dev` to start the development server or `npm run storybook` to
+    view components in isolation.
+  </div>
+  <div className="sb-section-item">
+    <h4>🗂️ Project Structure</h4>
+    <div>
+      Components live in `src/stories/`. Each component gets its own story file
+      for Storybook documentation.
+    </div>
+  </div>
+  <div className="sb-section-item">
+    <h4>📚 Learn More</h4>
+    <div>
+      Check the project README at the root level to understand the spec-driven
+      workflow and architecture.
+    </div>
+  </div>
+  <div className="sb-section-item">
+    <h4>🚀 Open Spec</h4>
+    <p>
+      This portfolio uses OpenSpec for structured development. See `openspec/`
+      folder for specs and proposals.
+    </p>
+  </div>
+</div>
+
+<style>
+  {`
+  .sb-container {
+    margin-bottom: 48px;
+  }
+
+  .sb-section {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+  }
+
+  img {
+    object-fit: cover;
+  }
+
+  .sb-section-title {
+    margin-bottom: 32px;
+  }
+
+  .sb-section-title h1 {
+    font-size: 2.5rem;
+    margin: 0 0 16px 0;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .sb-section-title p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #555;
+  }
+
+  .sb-section a:not(h1 a, h2 a, h3 a) {
+    font-size: 14px;
+    color: #667eea;
+    font-weight: 500;
+  }
+
+  .sb-section-item, .sb-grid-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .sb-section-item-heading {
+    padding-top: 20px !important;
+    padding-bottom: 5px !important;
+    margin: 0 !important;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #333;
+  }
+
+  .sb-section-item-paragraph {
+    margin: 0;
+    padding-bottom: 10px;
+    color: #666;
+    line-height: 1.5;
+    font-size: 0.95rem;
+  }
+
+  .sb-action-link {
+    text-decoration: none;
+    color: #667eea;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    transition: all 0.2s ease;
+  }
+
+  .sb-action-link:hover, .sb-action-link:focus {
+    color: #764ba2;
+    text-decoration: underline;
+    text-decoration-thickness: 0.03125rem;
+    text-underline-offset: 0.11em;
+    transform: translateX(2px);
+  }
+
+  .sb-chevron {
+    margin-left: 5px;
+  }
+
+  .sb-features-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 32px 20px;
+  }
+
+  .sb-grid-item {
+    padding: 24px;
+    background: #f8f9fa;
+    border-radius: 12px;
+    border-left: 4px solid #667eea;
+    transition: all 0.3s ease;
+  }
+
+  .sb-grid-item:hover {
+    background: #f0f2ff;
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(102, 126, 234, 0.15);
+  }
+
+  .sb-socials {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+  }
+
+  .sb-socials .sb-section-item {
+    padding: 24px;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    border-radius: 12px;
+    transition: all 0.3s ease;
+  }
+
+  .sb-socials .sb-section-item:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  }
+
+  .sb-socials .sb-section-item h4 {
+    margin: 0 0 12px 0;
+    font-size: 1.1rem;
+    color: #333;
+  }
+
+  .sb-socials p {
+    margin-bottom: 10px;
+    color: #555;
+  }
+
+  .sb-explore-image {
+    max-height: 32px;
+    align-self: flex-start;
+  }
+
+  .sb-addon {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    height: auto;
+    margin-bottom: 48px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(102, 126, 234, 0.3);
+    padding: 48px;
+    transition: all 0.4s ease;
+  }
+
+  .sb-addon:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 30px 80px rgba(102, 126, 234, 0.4);
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+
+  .sb-addon-text {
+    padding-left: 0;
+    max-width: 600px;
+    color: white;
+    z-index: 1;
+    flex: 1;
+  }
+
+  .sb-addon-text h4 {
+    padding-top: 0px;
+    margin: 0 0 20px 0;
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .sb-addon-text h4::before {
+    content: "✨";
+    font-size: 2.2rem;
+  }
+
+  .sb-addon-text p {
+    margin: 0 0 28px 0;
+    opacity: 0.98;
+    line-height: 1.8;
+    font-size: 1.05rem;
+    font-weight: 300;
+  }
+
+  .sb-addon-text .sb-action-link {
+    color: white;
+    font-weight: 600;
+    font-size: 1rem;
+    padding: 12px 24px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+
+  .sb-addon-text .sb-action-link:hover {
+    color: white;
+    background: rgba(255, 255, 255, 0.3);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: translateX(4px);
+    text-decoration: none;
+  }
+
+  .sb-addon-text .sb-action-link:focus {
+    outline: none;
+  }
+
+  @media screen and (max-width: 800px) {
+    .sb-addon-img {
+      left: 300px;
+    }
+
+    .sb-features-grid {
+      grid-template-columns: repeat(1, 1fr);
+    }
+
+    .sb-addon-text {
+      max-width: 100%;
+    }
+
+    .sb-addon-text h4 {
+      font-size: 1.7rem;
+    }
+  }
+
+  @media screen and (max-width: 600px) {
+    .sb-section {
+      flex-direction: column;
+    }
+
+    .sb-features-grid {
+      grid-template-columns: repeat(1, 1fr);
+    }
+
+    .sb-socials {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .sb-addon {
+      height: auto;
+      padding: 32px 24px;
+      overflow: visible;
+    }
+
+    .sb-addon-text {
+      padding-left: 0;
+      max-width: 100%;
+    }
+
+    .sb-addon-text h4 {
+      font-size: 1.6rem;
+      margin-bottom: 16px;
+    }
+
+    .sb-addon-text p {
+      font-size: 0.95rem;
+      margin-bottom: 20px;
+    }
+
+    .sb-section-title h1 {
+      font-size: 1.8rem;
+    }
+  }
+  `}
+</style>

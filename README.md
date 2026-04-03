@@ -107,7 +107,7 @@ npm run format
 
 ## Tech Stack
 
-- **Frontend**: React 19 + TypeScript
+- **Frontend**: React 19 + TypeScript, Tailwind 4.2.2, Storybook 10.3.4
 - **Build Tool**: Vite
 - **Linting/Formatting**: Biome (no ESLint, no Prettier)
 - **Package Manager**: npm

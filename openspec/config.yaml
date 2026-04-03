@@ -3,7 +3,9 @@ schema: spec-driven
 context: |
   Tech stack: TypeScript, React 19, Vite, Biome
   Package manager: npm
+  Storybook for UI components
   Linting/formatting: Biome (no ESLint, no Prettier)
+  Tailwind CSS for styling, version 4.2.2 with no tailwind.config.js file
   Build: Vite with tsc type-checking
   Project folder: lorenzo_ceglia/
   We use conventional commits
@@ -11,6 +13,7 @@ context: |
 rules:
   proposal:
     - Keep proposals under 500 words
+    - When a new component is created, place it in the "components" folder and create also the storybook story for it
     - Always include a "Non-goals" section
   tasks:
     - Break tasks into chunks of max 2 hours
