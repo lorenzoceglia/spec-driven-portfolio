@@ -9,6 +9,7 @@ type FloatingPlayerProps = {
 	currentSet: DJSet | null;
 	sets: DJSet[];
 	onSetChange: (url: string) => void;
+	onPlayingChange?: (isPlaying: boolean) => void;
 };
 
 function getEmbedUrl(url: string, autoPlay = false) {
@@ -24,7 +25,7 @@ function getEmbedUrl(url: string, autoPlay = false) {
  * and prev / play-pause / next + SoundCloud link controls.
  * When no set is selected, shows an idle placeholder.
  */
-export function FloatingPlayer({ isOpen, currentSet, sets, onSetChange }: FloatingPlayerProps) {
+export function FloatingPlayer({ isOpen, currentSet, sets, onSetChange, onPlayingChange }: FloatingPlayerProps) {
 	// Lazy-mount the iframe: only add it to the DOM when the user first selects a
 	// set, so the SoundCloud widget never tries to render on a 0×0 canvas.
 	const [iframeEl, setIframeEl] = useState<HTMLIFrameElement | null>(null);
@@ -55,6 +56,11 @@ export function FloatingPlayer({ isOpen, currentSet, sets, onSetChange }: Floati
 		prevUrlRef.current = currentSet.url;
 		load(currentSet.url, true);
 	}, [currentSet?.url]); // eslint-disable-line react-hooks/exhaustive-deps
+
+	// Notify parent whenever the playing state changes
+	useEffect(() => {
+		onPlayingChange?.(isPlaying);
+	}, [isPlaying, onPlayingChange]);
 
 	const currentIndex = sets.findIndex((s) => s.url === currentSet?.url);
 	const displayTitle = trackTitle || currentSet?.title || '';

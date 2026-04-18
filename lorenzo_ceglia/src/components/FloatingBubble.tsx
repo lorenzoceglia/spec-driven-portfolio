@@ -8,6 +8,8 @@ type FloatingBubbleProps = {
 	item: TechItem;
 	animDelay: number;
 	isTransitioning: boolean;
+	isActive?: boolean;
+	onClick?: () => void;
 	style?: React.CSSProperties;
 };
 
@@ -16,7 +18,8 @@ type FloatingBubbleProps = {
  *
  * A single circular tech bubble, absolutely positioned within BubblePack.
  * Direction-B hover: slate-50 + border at rest → bg-slate-900 + white icon.
- * Label inside bubble for r ≥ 30 (confidence 3–5), tooltip on hover for smaller.
+ * Label inside bubble for r ≥ 30 (confidence 3–5).
+ * Click fires `onClick` — BubblePack manages the portal tooltip lifecycle.
  * Floats with a staggered CSS keyframe animation.
  */
 export function FloatingBubble({
@@ -26,6 +29,8 @@ export function FloatingBubble({
 	item,
 	animDelay,
 	isTransitioning,
+	isActive: _isActive,
+	onClick,
 	style,
 }: FloatingBubbleProps) {
 	const [hovered, setHovered] = useState(false);
@@ -52,29 +57,16 @@ export function FloatingBubble({
 				animationDelay: `${animDelay * 0.35}s`,
 				animationPlayState: isTransitioning ? 'paused' : 'running',
 				transition: 'transform 350ms ease, opacity 200ms ease',
+				cursor: onClick ? 'pointer' : 'default',
 				...style,
+			}}
+			onClick={(e) => {
+				e.stopPropagation();
+				onClick?.();
 			}}
 			onMouseEnter={() => setHovered(true)}
 			onMouseLeave={() => setHovered(false)}
 		>
-			{/* Tooltip for small bubbles */}
-			{!showLabelInside && hovered && (
-				<div
-					style={{
-						position: 'absolute',
-						bottom: '100%',
-						left: '50%',
-						transform: 'translateX(-50%)',
-						marginBottom: 6,
-						pointerEvents: 'none',
-						zIndex: 10,
-					}}
-					className="text-xs text-slate-700 bg-white border border-slate-100 rounded px-2 py-0.5 shadow-sm whitespace-nowrap"
-				>
-					{item.name}
-				</div>
-			)}
-
 			{/* Bubble circle */}
 			<div
 				style={{
@@ -88,9 +80,8 @@ export function FloatingBubble({
 					flexDirection: 'column',
 					alignItems: 'center',
 					justifyContent: 'center',
-					gap: showLabelInside ? 2 : 0,
-					cursor: 'default',
-					userSelect: 'none',
+				gap: showLabelInside ? 2 : 0,
+				userSelect: 'none',
 				}}
 			>
 				<item.icon

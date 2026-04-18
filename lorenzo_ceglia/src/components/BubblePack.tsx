@@ -3,11 +3,16 @@ import type { TechItem } from '../data/techStack';
 import type { PackedCircle } from '../hooks/useCirclePacker';
 import { useCirclePacker } from '../hooks/useCirclePacker';
 import { FloatingBubble } from './FloatingBubble';
+import { BubbleTooltip } from './BubbleTooltip';
 
 type ExitingBubble = PackedCircle & { exiting: true };
 
 type BubblePackProps = {
 	items: TechItem[];
+	/** Full unfiltered set — used to compute a stable container height so the
+	 *  cloud does not collapse when a smaller filter tab is active.
+	 *  Defaults to `items` when omitted. */
+	allItems?: TechItem[];
 };
 
 /**
@@ -17,13 +22,20 @@ type BubblePackProps = {
  * useCirclePacker. Tab changes trigger a FLIP animation: staying bubbles
  * translate to their new positions, exiting bubbles scale out.
  *
+ * Click state is managed here: one `activeId` at a time. A portal
+ * BubbleTooltip is rendered when a bubble is active. Outside-click dismissal
+ * is handled by a document-level pointerdown listener.
+ *
  * Layout formula (centred coordinate system from the packer):
  *   left = circle.x - circle.r + cloudWidth  / 2
  *   top  = circle.y - circle.r + cloudHeight / 2
  */
-export function BubblePack({ items }: BubblePackProps) {
+export function BubblePack({ items, allItems }: BubblePackProps) {
 	const containerRef = useRef<HTMLDivElement>(null);
 	const { circles, cloudWidth, cloudHeight } = useCirclePacker(items, containerRef);
+	// Stable height baseline: always as tall as the full set so the container
+	// does not collapse when a smaller filter tab is active.
+	const { cloudHeight: allCloudHeight } = useCirclePacker(allItems ?? items, containerRef);
 
 	// FLIP: store previous screen positions per bubble id (populated after each render)
 	const prevPositionsRef = useRef<Map<string, { left: number; top: number }>>(new Map());
@@ -39,15 +51,21 @@ export function BubblePack({ items }: BubblePackProps) {
 	// Transitioning flag — pauses float animation during FLIP
 	const [isTransitioning, setIsTransitioning] = useState(false);
 
-	// Ref to bubble wrapper DOM nodes for FLIP snapshotting
+	// Ref to bubble wrapper DOM nodes for FLIP snapshotting and tooltip anchoring
 	const bubbleRefs = useRef<Map<string, HTMLDivElement>>(new Map());
 
 	const prevItemIdsRef = useRef<Set<string>>(new Set());
+
+	// Click state: id of the currently active bubble (tooltip open)
+	const [activeId, setActiveId] = useState<string | null>(null);
 
 	// FLIP implementation
 	useLayoutEffect(() => {
 		const currentIds = new Set(items.map((i) => i.name));
 		const prevIds = prevItemIdsRef.current;
+
+		// Clear active tooltip whenever items change (tab switch)
+		setActiveId(null);
 
 		// Identify exiting items — scale them out
 		const newExiting: ExitingBubble[] = [];
@@ -138,6 +156,14 @@ export function BubblePack({ items }: BubblePackProps) {
 		prevPositionsRef.current = positions;
 	});
 
+	// Document-level outside-click dismissal (stopPropagation on bubble clicks
+	// prevents this from firing when clicking a bubble).
+	useEffect(() => {
+		const handleOutsideClick = () => setActiveId(null);
+		document.addEventListener('pointerdown', handleOutsideClick);
+		return () => document.removeEventListener('pointerdown', handleOutsideClick);
+	}, []);
+
 	const setBubbleRef = useCallback((id: string, el: HTMLDivElement | null) => {
 		if (el) {
 			bubbleRefs.current.set(id, el);
@@ -146,14 +172,24 @@ export function BubblePack({ items }: BubblePackProps) {
 		}
 	}, []);
 
+	// Compute tooltip anchor rect from the active bubble's wrapper element
+	const activeRect = activeId
+		? bubbleRefs.current.get(activeId)?.getBoundingClientRect()
+		: null;
+	const activeName = activeId
+		? circles.find((c) => c.id === activeId)?.item.name ?? null
+		: null;
+
 	return (
 		<div
 			ref={containerRef}
 			style={{
 				position: 'relative',
 				width: '100%',
-				height: cloudHeight,
-				transition: 'height 400ms ease',
+				border: '1px solid #94a3b8',
+				borderRadius: "50px",
+				borderWidth: "1px",
+				height: Math.max(cloudHeight, allCloudHeight),
 				overflow: 'hidden',
 			}}
 		>
@@ -179,6 +215,7 @@ export function BubblePack({ items }: BubblePackProps) {
 			{/* Active bubbles */}
 			{circles.map((circle, index) => {
 				const override = flipOverrides.get(circle.id);
+				const isActive = circle.id === activeId;
 				return (
 					<div
 						key={circle.id}
@@ -199,10 +236,19 @@ export function BubblePack({ items }: BubblePackProps) {
 							item={circle.item}
 							animDelay={index}
 							isTransitioning={isTransitioning}
+							isActive={isActive}
+							onClick={() => {
+								setActiveId((prev) => (prev === circle.id ? null : circle.id));
+							}}
 						/>
 					</div>
 				);
 			})}
+
+			{/* Portal tooltip — rendered at document.body, above everything */}
+			{activeRect && activeName && (
+				<BubbleTooltip name={activeName} anchorRect={activeRect} />
+			)}
 		</div>
 	);
 }

@@ -3,6 +3,7 @@ import type { DJSet } from '../data/djSets';
 type SetCardProps = {
 	set: DJSet;
 	isActive: boolean;
+	isPlaying: boolean;
 	onPlay: (url: string) => void;
 };
 
@@ -13,7 +14,7 @@ type SetCardProps = {
  * Shows an orange ring when the set is currently playing.
  * Entire card is clickable to trigger playback.
  */
-export function SetCard({ set, isActive, onPlay }: SetCardProps) {
+export function SetCard({ set, isActive, isPlaying, onPlay }: SetCardProps) {
 	return (
 		<button
 			type="button"
@@ -36,7 +37,7 @@ export function SetCard({ set, isActive, onPlay }: SetCardProps) {
 					<span className="mx-1.5 text-slate-600">·</span>
 					{set.date}
 				</p>
-				{isActive && (
+				{isActive && isPlaying && (
 					<span className="inline-flex items-center gap-1 mt-2 text-xs font-medium text-orange-400">
 						<span className="w-1.5 h-1.5 rounded-full bg-orange-400 animate-pulse" />
 						Now Playing

@@ -35,3 +35,13 @@ export const Interactive: Story = {
 		);
 	},
 };
+
+/** Vertical orientation — used as sidebar on desktop (md+) */
+export const Vertical: Story = {
+	args: {
+		tabs: ['All', 'Frontend', 'Backend', 'Database', 'Tools', 'AI'],
+		activeTab: 'All',
+		onTabChange: () => {},
+		orientation: 'vertical',
+	},
+};

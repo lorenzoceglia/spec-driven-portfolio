@@ -5,6 +5,7 @@ import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
 type BSideSectionProps = {
 	sets: DJSet[];
 	currentSetUrl: string | null;
+	isPlaying: boolean;
 	onPlay: (url: string) => void;
 };
 
@@ -15,7 +16,7 @@ type BSideSectionProps = {
  * Supports scroll-reveal animation. Each card triggers playback in
  * the FloatingPlayer via the onPlay callback.
  */
-export function BSideSection({ sets, currentSetUrl, onPlay }: BSideSectionProps) {
+export function BSideSection({ sets, currentSetUrl, isPlaying, onPlay }: BSideSectionProps) {
 	const [ref, isVisible] = useIntersectionObserver<HTMLElement>();
 
 	return (
@@ -42,6 +43,7 @@ export function BSideSection({ sets, currentSetUrl, onPlay }: BSideSectionProps)
 							key={set.url}
 							set={set}
 							isActive={set.url === currentSetUrl}
+							isPlaying={isPlaying}
 							onPlay={onPlay}
 						/>
 					))}

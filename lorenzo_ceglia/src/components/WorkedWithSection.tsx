@@ -11,9 +11,15 @@ type WorkedWithSectionProps = {
 /**
  * WorkedWithSection
  *
- * Replaces TechStackSection. Renders an organic circle-packed bubble cloud
- * of technologies with confidence-driven sizes. Filter tabs re-pack the cloud
- * with a FLIP animation. Defaults to "All" tab.
+ * Renders an organic circle-packed bubble cloud of technologies with
+ * confidence-driven sizes. Filter tabs re-pack the cloud with a FLIP animation.
+ *
+ * Layout:
+ * - Mobile  (< md): filter pills above cloud, horizontal scrollable row.
+ * - Desktop (≥ md): filter pills as left sidebar (~144px), cloud fills remaining width.
+ *
+ * The ResizeObserver in useCirclePacker automatically repacks the cloud when
+ * the flex-1 column width changes on breakpoint transition.
  */
 export function WorkedWithSection({ techs }: WorkedWithSectionProps) {
 	const [ref, isVisible] = useIntersectionObserver<HTMLElement>();
@@ -29,7 +35,7 @@ export function WorkedWithSection({ techs }: WorkedWithSectionProps) {
 	return (
 		<section
 			ref={ref}
-			className="px-6 py-20"
+			className="px-6 py-20 bg-white"
 			style={{
 				opacity: isVisible ? 1 : 0,
 				transform: isVisible ? 'translateY(0)' : 'translateY(24px)',
@@ -40,8 +46,24 @@ export function WorkedWithSection({ techs }: WorkedWithSectionProps) {
 				<h2 className="text-xs font-semibold tracking-widest text-slate-400 uppercase mb-10">
 					I worked with
 				</h2>
-				<FilterTabs tabs={availableTabs} activeTab={activeTab} onTabChange={setActiveTab} />
-				<BubblePack items={filtered} />
+
+				{/* Two-column on desktop, single-column on mobile */}
+				<div className="flex flex-col md:flex-row gap-8">
+					{/* Filter sidebar (desktop) / horizontal scroll bar (mobile) */}
+					<div className="md:w-36 md:flex-shrink-0">
+						<FilterTabs
+							tabs={availableTabs}
+							activeTab={activeTab}
+							onTabChange={setActiveTab}
+							orientation="vertical"
+						/>
+					</div>
+
+					{/* Bubble cloud — flex-1 so it takes all remaining horizontal space */}
+					<div className="flex-1 min-w-0">
+						<BubblePack items={filtered} allItems={techs} />
+					</div>
+				</div>
 			</div>
 		</section>
 	);

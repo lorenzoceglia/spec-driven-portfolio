@@ -26,6 +26,7 @@ const socialLinks: SocialLink[] = [
 export function App() {
 	const [currentSetUrl, setCurrentSetUrl] = useState<string | null>(null);
 	const [isFloatingOpen, setIsFloatingOpen] = useState(false);
+	const [isPlaying, setIsPlaying] = useState(false);
 
 	// Observe the hero wrapper — show floating player when hero leaves viewport
 	const [heroRef, heroVisible] = useIntersectionObserver<HTMLDivElement>({
@@ -67,13 +68,14 @@ export function App() {
 				<BSideSection
 					sets={djSets}
 					currentSetUrl={currentSetUrl}
+					isPlaying={isPlaying}
 					onPlay={setCurrentSetUrl}
 				/>
 			</main>
 
 			<Footer name="Lorenzo Ceglia" links={socialLinks} />
 
-			<FloatingPlayer isOpen={isFloatingOpen} currentSet={currentSet} sets={djSets} onSetChange={setCurrentSetUrl} />
+			<FloatingPlayer isOpen={isFloatingOpen} currentSet={currentSet} sets={djSets} onSetChange={setCurrentSetUrl} onPlayingChange={setIsPlaying} />
 		</div>
 	);
 }
