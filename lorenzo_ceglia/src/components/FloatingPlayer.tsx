@@ -1,8 +1,7 @@
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { FaPlay, FaPause, FaBackwardStep, FaForwardStep } from 'react-icons/fa6';
 import { SiSoundcloud } from 'react-icons/si';
 import type { DJSet } from '../data/djSets';
-import { djSets } from '../data/djSets';
 import { useSoundCloudWidget } from '../hooks/useSoundCloudWidget';
 
 type FloatingPlayerProps = {
@@ -12,8 +11,8 @@ type FloatingPlayerProps = {
 	onSetChange: (url: string) => void;
 };
 
-function getEmbedUrl(url: string) {
-	return `https://w.soundcloud.com/player/?url=${encodeURIComponent(url)}&show_artwork=false&visual=false&auto_play=false`;
+function getEmbedUrl(url: string, autoPlay = false) {
+	return `https://w.soundcloud.com/player/?url=${encodeURIComponent(url)}&show_artwork=false&visual=false&auto_play=${autoPlay}`;
 }
 
 /**
@@ -26,19 +25,29 @@ function getEmbedUrl(url: string) {
  * When no set is selected, shows an idle placeholder.
  */
 export function FloatingPlayer({ isOpen, currentSet, sets, onSetChange }: FloatingPlayerProps) {
-	const iframeRef = useRef<HTMLIFrameElement>(null);
+	// Lazy-mount the iframe: only add it to the DOM when the user first selects a
+	// set, so the SoundCloud widget never tries to render on a 0×0 canvas.
+	const [iframeEl, setIframeEl] = useState<HTMLIFrameElement | null>(null);
+	const callbackRef = useCallback((el: HTMLIFrameElement | null) => setIframeEl(el), []);
+	const [iframeSrc, setIframeSrc] = useState<string | null>(null);
+	const isMountedRef = useRef(false);
+
 	const { isPlaying, trackTitle, relativePosition, load, play, pause } =
-		useSoundCloudWidget(iframeRef);
+		useSoundCloudWidget(iframeEl);
 
-	// Capture the initial embed URL once (iframe src never changes as a React prop)
-	const initialEmbedUrl = useRef(getEmbedUrl(djSets[0].url));
-
-	// Track previous URL to avoid re-loading the same set (initialised to first set's URL)
-	const prevUrlRef = useRef<string>(djSets[0].url);
+	// Track previous URL to avoid re-loading the same set
+	const prevUrlRef = useRef<string>('');
 
 	// Load new set whenever currentSet.url changes
 	useEffect(() => {
 		if (!currentSet) return;
+		if (!isMountedRef.current) {
+			// First selection: mount the iframe with auto_play=true in the src URL
+			setIframeSrc(getEmbedUrl(currentSet.url, true));
+			isMountedRef.current = true;
+			prevUrlRef.current = currentSet.url;
+			return;
+		}
 		if (prevUrlRef.current === currentSet.url) {
 			play();
 			return;
@@ -52,15 +61,24 @@ export function FloatingPlayer({ isOpen, currentSet, sets, onSetChange }: Floati
 
 	return (
 		<>
-			{/* Hidden iframe — the actual audio source */}
-			<iframe
-				ref={iframeRef}
-				src={initialEmbedUrl.current}
-				title="SoundCloud Player"
-				allow="autoplay"
-				className="absolute w-0 h-0 overflow-hidden pointer-events-none"
-				aria-hidden="true"
-			/>
+			{/* Hidden iframe — only mounted after the user first selects a set */}
+			{iframeSrc && (
+				<iframe
+					ref={callbackRef}
+					src={iframeSrc}
+					title="SoundCloud Player"
+					allow="autoplay"
+					style={{
+						position: 'fixed',
+						left: '-10px',
+						top: '-10px',
+						width: '1px',
+						height: '1px',
+						pointerEvents: 'none',
+					}}
+					aria-hidden="true"
+				/>
+			)}
 
 			{/* Floating player bar */}
 			<div

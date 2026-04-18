@@ -37,11 +37,14 @@ type PendingLoad = { url: string; autoPlay: boolean };
  *
  * Encapsulates the SoundCloud Widget API lifecycle:
  * - Loads the SC Widget API script once
- * - Initialises the widget from an iframe ref
+ * - Initialises the widget when the iframe element is provided (non-null)
  * - Queues load() calls that arrive before READY fires
  * - Exposes load(), play(), pause(), isPlaying, trackTitle, relativePosition
+ *
+ * Accepts the iframe element directly (not a ref) so the effect re-runs when
+ * the element is lazy-mounted via a callback ref.
  */
-export function useSoundCloudWidget(iframeRef: React.RefObject<HTMLIFrameElement | null>) {
+export function useSoundCloudWidget(iframe: HTMLIFrameElement | null) {
 	const widgetRef = useRef<SCWidget | null>(null);
 	const isReadyRef = useRef(false);
 	const pendingLoadRef = useRef<PendingLoad | null>(null);
@@ -58,14 +61,13 @@ export function useSoundCloudWidget(iframeRef: React.RefObject<HTMLIFrameElement
 		document.head.appendChild(script);
 	}, []);
 
-	// Initialise widget when iframe is mounted
+	// Initialise widget when iframe element becomes available
 	useEffect(() => {
-		const iframe = iframeRef.current;
 		if (!iframe) return;
 
 		const bindWidget = () => {
-			if (!window.SC || !iframeRef.current) return;
-			const widget = window.SC.Widget(iframeRef.current);
+			if (!window.SC || !iframe) return;
+			const widget = window.SC.Widget(iframe);
 			widgetRef.current = widget;
 
 			const onReady = () => {
@@ -106,7 +108,7 @@ export function useSoundCloudWidget(iframeRef: React.RefObject<HTMLIFrameElement
 				return () => script.removeEventListener('load', bindWidget);
 			}
 		}
-	}, [iframeRef]);
+	}, [iframe]);
 
 	const load = (url: string, autoPlay = false) => {
 		setRelativePosition(0);

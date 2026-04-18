@@ -4,7 +4,7 @@ import { MdEmail } from 'react-icons/md';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { HeroSection } from './components/HeroSection';
-import { TechStackSection } from './components/TechStackSection';
+import { WorkedWithSection } from './components/WorkedWithSection';
 import { CompaniesSection } from './components/CompaniesSection';
 import { OpenSourceSection } from './components/OpenSourceSection';
 import { BSideSection } from './components/BSideSection';
@@ -61,7 +61,7 @@ export function App() {
 						]}
 					/>
 				</div>
-				<TechStackSection techs={techStack} />
+				<WorkedWithSection techs={techStack} />
 				<CompaniesSection companies={companies} />
 				<OpenSourceSection projects={openSourceProjects} />
 				<BSideSection
