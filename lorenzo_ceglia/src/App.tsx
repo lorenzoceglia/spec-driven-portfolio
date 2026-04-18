@@ -43,7 +43,7 @@ export function App() {
 		}
 	}, [heroVisible]);
 
-	const currentSet = djSets.find((s) => s.url === currentSetUrl) ?? djSets[0];
+	const currentSet = djSets.find((s) => s.url === currentSetUrl) ?? null;
 
 	return (
 		<div className={`flex flex-col min-h-screen${isFloatingOpen ? ' pb-16' : ''}`}>
@@ -73,7 +73,7 @@ export function App() {
 
 			<Footer name="Lorenzo Ceglia" links={socialLinks} />
 
-			<FloatingPlayer isOpen={isFloatingOpen} currentSet={currentSet} />
+			<FloatingPlayer isOpen={isFloatingOpen} currentSet={currentSet} sets={djSets} onSetChange={setCurrentSetUrl} />
 		</div>
 	);
 }

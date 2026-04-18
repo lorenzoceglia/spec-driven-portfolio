@@ -15,7 +15,7 @@ type CardProps = {
  */
 export function Card({ children, className = '', href }: CardProps) {
 	const base =
-		'bg-white border border-slate-100 rounded-2xl p-6 transition-all duration-250 hover:-translate-y-1 hover:shadow-lg hover:shadow-slate-200/60';
+		'bg-white border border-slate-200 rounded-lg p-6 transition-all duration-250 hover:-translate-y-1 hover:shadow-lg hover:shadow-slate-200/60';
 
 	if (href) {
 		return (

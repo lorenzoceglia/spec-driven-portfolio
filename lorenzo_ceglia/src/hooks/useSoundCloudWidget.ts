@@ -23,7 +23,7 @@ type SCWidgetConstructor = {
 };
 
 type SCWidget = {
-	bind: (event: string, callback: () => void) => void;
+	bind: (event: string, callback: (data?: unknown) => void) => void;
 	load: (url: string, options?: Record<string, unknown>) => void;
 	play: () => void;
 	pause: () => void;
@@ -39,7 +39,7 @@ type PendingLoad = { url: string; autoPlay: boolean };
  * - Loads the SC Widget API script once
  * - Initialises the widget from an iframe ref
  * - Queues load() calls that arrive before READY fires
- * - Exposes load(), toggle(), isPlaying, trackTitle
+ * - Exposes load(), play(), pause(), isPlaying, trackTitle, relativePosition
  */
 export function useSoundCloudWidget(iframeRef: React.RefObject<HTMLIFrameElement | null>) {
 	const widgetRef = useRef<SCWidget | null>(null);
@@ -47,6 +47,7 @@ export function useSoundCloudWidget(iframeRef: React.RefObject<HTMLIFrameElement
 	const pendingLoadRef = useRef<PendingLoad | null>(null);
 	const [isPlaying, setIsPlaying] = useState(false);
 	const [trackTitle, setTrackTitle] = useState('');
+	const [relativePosition, setRelativePosition] = useState(0);
 
 	// Load SC Widget API script once
 	useEffect(() => {
@@ -88,6 +89,10 @@ export function useSoundCloudWidget(iframeRef: React.RefObject<HTMLIFrameElement
 			});
 			widget.bind(window.SC.Widget.Events.PAUSE, () => setIsPlaying(false));
 			widget.bind(window.SC.Widget.Events.FINISH, () => setIsPlaying(false));
+			widget.bind(window.SC.Widget.Events.PLAY_PROGRESS, (data?: unknown) => {
+				const e = data as { relativePosition: number };
+				setRelativePosition(e.relativePosition);
+			});
 		};
 
 		if (window.SC) {
@@ -104,6 +109,7 @@ export function useSoundCloudWidget(iframeRef: React.RefObject<HTMLIFrameElement
 	}, [iframeRef]);
 
 	const load = (url: string, autoPlay = false) => {
+		setRelativePosition(0);
 		if (!isReadyRef.current || !widgetRef.current) {
 			pendingLoadRef.current = { url, autoPlay };
 			return;
@@ -115,5 +121,5 @@ export function useSoundCloudWidget(iframeRef: React.RefObject<HTMLIFrameElement
 	const play = () => widgetRef.current?.play();
 	const pause = () => widgetRef.current?.pause();
 
-	return { isPlaying, trackTitle, load, play, pause };
+	return { isPlaying, trackTitle, relativePosition, load, play, pause };
 }

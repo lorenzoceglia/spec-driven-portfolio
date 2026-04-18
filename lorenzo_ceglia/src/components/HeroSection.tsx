@@ -15,17 +15,16 @@ type HeroSectionProps = {
  *
  * Full-width intro section. Name, role, bio, and optional identity chips
  * animate in with a staggered fade-in + slide-up effect on mount.
- * Gradient background flows from white to a soft indigo tint.
+ * White background, no gradient.
  */
 export function HeroSection({ name, role, bio, chips }: HeroSectionProps) {
 	return (
 		<section
 			className="min-h-[calc(100svh-3.25rem)] flex flex-col justify-center px-6 py-20 max-w-5xl mx-auto"
-			style={{ background: 'linear-gradient(to bottom, #ffffff, #eef2ff)' }}
 		>
 			<div className="space-y-4">
 				<h1
-					className="text-5xl sm:text-7xl font-bold tracking-tight text-slate-900"
+					className="text-6xl sm:text-8xl font-black tracking-tighter text-slate-900"
 					style={{ animation: 'fadeSlideUp 0.7s ease both', animationDelay: '0ms' }}
 				>
 					{name}
@@ -54,7 +53,7 @@ export function HeroSection({ name, role, bio, chips }: HeroSectionProps) {
 										const target = document.getElementById(chip.href!.replace('#', ''));
 										target?.scrollIntoView({ behavior: 'smooth' });
 									}}
-									className="inline-flex items-center px-4 py-2 rounded-full border border-slate-200 text-sm text-slate-600 hover:border-indigo-300 hover:text-indigo-600 transition-colors duration-200 cursor-pointer"
+									className="inline-flex items-center px-4 py-2 rounded-full border border-slate-200 text-sm text-slate-600 hover:border-slate-900 hover:text-slate-900 transition-colors duration-200 cursor-pointer"
 									style={{
 										animation: 'fadeSlideUp 0.7s ease both',
 										animationDelay: `${450 + i * 150}ms`,

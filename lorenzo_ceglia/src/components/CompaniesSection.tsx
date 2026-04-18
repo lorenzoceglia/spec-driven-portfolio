@@ -39,7 +39,7 @@ export function CompaniesSection({ companies }: CompaniesSectionProps) {
 										{company.period}
 									</span>
 								</div>
-								<p className="text-sm font-medium text-indigo-500">{company.role}</p>
+								<p className="text-sm font-medium text-slate-700">{company.role}</p>
 								<p className="text-sm text-slate-500 leading-relaxed">{company.description}</p>
 							</div>
 						</Card>

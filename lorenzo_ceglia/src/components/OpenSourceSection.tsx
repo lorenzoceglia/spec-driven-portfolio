@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { FaGithub } from 'react-icons/fa6';
-import { SiNpm } from 'react-icons/si';
+import { SiNpm, SiGitlab } from 'react-icons/si';
 import type { OSProject } from '../data/openSource';
 import { Card } from './Card';
 import { FilterTabs } from './FilterTabs';
@@ -65,18 +65,22 @@ export function OpenSourceSection({ projects }: OpenSourceSectionProps) {
 												<SiNpm size={18} />
 											</a>
 										)}
-										<a
-											href={project.url}
-											target="_blank"
-											rel="noopener noreferrer"
-											aria-label={`${project.name} on GitHub`}
-											className="text-slate-400 hover:text-slate-700 transition-colors"
-										>
+									<a
+										href={project.url}
+										target="_blank"
+										rel="noopener noreferrer"
+										aria-label={`${project.name} ${project.platform === 'gitlab' ? 'on GitLab' : 'on GitHub'}`}
+										className="text-slate-400 hover:text-slate-700 transition-colors"
+									>
+										{project.platform === 'gitlab' ? (
+											<SiGitlab size={16} />
+										) : (
 											<FaGithub size={16} />
-										</a>
+										)}
+									</a>
 									</div>
 								</div>
-								<span className="inline-block text-xs font-medium text-indigo-500 bg-indigo-50 px-2 py-0.5 rounded-full">
+								<span className="inline-block text-xs font-mono text-white bg-slate-900 px-2 py-0.5 rounded">
 									{project.language}
 								</span>
 								<p className="text-sm text-slate-500 leading-relaxed">{project.description}</p>

@@ -1,12 +1,15 @@
 import { useEffect, useRef } from 'react';
-import { FaPlay, FaPause } from 'react-icons/fa6';
+import { FaPlay, FaPause, FaBackwardStep, FaForwardStep } from 'react-icons/fa6';
 import { SiSoundcloud } from 'react-icons/si';
 import type { DJSet } from '../data/djSets';
+import { djSets } from '../data/djSets';
 import { useSoundCloudWidget } from '../hooks/useSoundCloudWidget';
 
 type FloatingPlayerProps = {
 	isOpen: boolean;
 	currentSet: DJSet | null;
+	sets: DJSet[];
+	onSetChange: (url: string) => void;
 };
 
 function getEmbedUrl(url: string) {
@@ -18,30 +21,33 @@ function getEmbedUrl(url: string) {
  *
  * Sticky bottom bar that appears when the hero scrolls out of view.
  * Contains a hidden SoundCloud iframe controlled via the Widget API.
- * Displays cover art, set title, and play/pause + SoundCloud link.
+ * Shows cover art, waveform with orange progress overlay, track title,
+ * and prev / play-pause / next + SoundCloud link controls.
+ * When no set is selected, shows an idle placeholder.
  */
-export function FloatingPlayer({ isOpen, currentSet }: FloatingPlayerProps) {
+export function FloatingPlayer({ isOpen, currentSet, sets, onSetChange }: FloatingPlayerProps) {
 	const iframeRef = useRef<HTMLIFrameElement>(null);
-	const { isPlaying, trackTitle, load, play, pause } = useSoundCloudWidget(iframeRef);
+	const { isPlaying, trackTitle, relativePosition, load, play, pause } =
+		useSoundCloudWidget(iframeRef);
 
 	// Capture the initial embed URL once (iframe src never changes as a React prop)
-	const initialEmbedUrl = useRef(currentSet ? getEmbedUrl(currentSet.url) : '');
+	const initialEmbedUrl = useRef(getEmbedUrl(djSets[0].url));
 
-	// Track previous URL to avoid re-loading the same set on first mount
-	const prevUrlRef = useRef<string | undefined>(undefined);
+	// Track previous URL to avoid re-loading the same set (initialised to first set's URL)
+	const prevUrlRef = useRef<string>(djSets[0].url);
 
+	// Load new set whenever currentSet.url changes
 	useEffect(() => {
 		if (!currentSet) return;
-		if (prevUrlRef.current === undefined) {
-			// First render — iframe src already has this URL
-			prevUrlRef.current = currentSet.url;
+		if (prevUrlRef.current === currentSet.url) {
+			play();
 			return;
 		}
-		if (prevUrlRef.current === currentSet.url) return;
 		prevUrlRef.current = currentSet.url;
 		load(currentSet.url, true);
 	}, [currentSet?.url]); // eslint-disable-line react-hooks/exhaustive-deps
 
+	const currentIndex = sets.findIndex((s) => s.url === currentSet?.url);
 	const displayTitle = trackTitle || currentSet?.title || '';
 
 	return (
@@ -64,6 +70,14 @@ export function FloatingPlayer({ isOpen, currentSet }: FloatingPlayerProps) {
 					transition: 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
 				}}
 			>
+			{/* Waveform progress bar */}
+			<div className="h-1 w-full bg-slate-800">
+				<div
+					className="h-full bg-orange-500"
+					style={{ width: `${relativePosition * 100}%`, transition: 'width 250ms linear' }}
+				/>
+			</div>
+
 				<div className="max-w-5xl mx-auto px-4 h-16 flex items-center gap-4">
 					{/* Cover art */}
 					{currentSet && (
@@ -76,21 +90,56 @@ export function FloatingPlayer({ isOpen, currentSet }: FloatingPlayerProps) {
 
 					{/* Track info */}
 					<div className="flex-1 min-w-0">
-						<p className="text-white text-sm font-medium truncate">
-							{displayTitle || 'Loading…'}
-						</p>
-						<p className="text-slate-500 text-xs">Lorenzo Ceglia</p>
+						{currentSet ? (
+							<>
+								<p className="text-white text-sm font-medium truncate">
+									{displayTitle || 'Loading\u2026'}
+								</p>
+								<p className="text-slate-500 text-xs">Lorenzo Ceglia</p>
+							</>
+						) : (
+							<p className="text-slate-500 text-sm">Select a set to play</p>
+						)}
 					</div>
 
 					{/* Controls */}
 					<div className="flex items-center gap-3 flex-shrink-0">
-					<button
-						type="button"
-						onClick={() => (isPlaying ? pause() : play())}
-						aria-label={isPlaying ? 'Pause' : 'Play'}
-						className="w-9 h-9 flex items-center justify-center rounded-full bg-slate-700 hover:bg-slate-600 text-white transition-colors"
-					>
+						{/* Prev */}
+						<button
+							type="button"
+							onClick={() =>
+								currentIndex > 0 && onSetChange(sets[currentIndex - 1].url)
+							}
+							disabled={!currentSet || currentIndex <= 0}
+							aria-label="Previous set"
+							className="text-slate-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+						>
+							<FaBackwardStep size={16} />
+						</button>
+
+						{/* Play / Pause */}
+						<button
+							type="button"
+							onClick={() => (isPlaying ? pause() : play())}
+							disabled={!currentSet}
+							aria-label={isPlaying ? 'Pause' : 'Play'}
+							className="w-9 h-9 flex items-center justify-center rounded-full bg-slate-700 hover:bg-slate-600 text-white disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+						>
 							{isPlaying ? <FaPause size={14} /> : <FaPlay size={14} />}
+						</button>
+
+						{/* Next */}
+						<button
+							type="button"
+							onClick={() =>
+								currentIndex < sets.length - 1 &&
+								onSetChange(sets[currentIndex + 1].url)
+							}
+							disabled={!currentSet || currentIndex >= sets.length - 1}
+							aria-label="Next set"
+							className="text-slate-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+						>
+							<FaForwardStep size={16} />
 						</button>
 
 						{currentSet && (

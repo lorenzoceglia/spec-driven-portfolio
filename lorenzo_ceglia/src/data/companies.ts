@@ -12,33 +12,27 @@ export const companies: Company[] = [
 		role: 'Frontend Developer',
 		period: '2026 – Present',
 		description:
-			'Frontend development with AWS serverless infrastructure (Lambda, AppSync). Building scalable cloud-native web applications.',
+			'Building production-grade web applications on AWS serverless infrastructure. Working closely with backend and cloud teams to ship scalable features in a fast-moving consulting environment.',
 	},
 	{
 		name: 'Accenture Italy',
 		role: 'Frontend Developer',
 		period: '04/2023 – 02/2026',
 		description:
-			'Major automotive client and Italian public administration apps. Stack: TypeScript 5, React 18, Angular 17, Tailwind, Redux, Docker, Zustand.',
+			'Delivered frontend for a major European automotive client and Italian public administration systems — high-stakes products used by millions, built across large cross-functional teams.',
 	},
 	{
 		name: 'Next Adv',
 		role: 'Frontend Developer',
 		period: '07/2022 – 04/2023',
 		description:
-			'Front End Lead for React/Next.js apps, Node/Express backend tasks, WordPress PHP customisation. Stack: PostgreSQL, GraphQL, Hasura, React, Next.js 12, Angular 11, Ionic 6, Node.js, Express.',
+			'Worked as Front End Lead across React and Next.js products, handled Node/Express backend tasks, and delivered WordPress customisations for a diverse digital agency client portfolio.',
 	},
 	{
 		name: 'Fabless S.P.A.',
 		role: 'Full Stack Developer',
 		period: '05/2021 – 07/2022',
 		description:
-			'Internal dev team, maintenance and evolutionary implementations on proprietary apps. Stack: PHP 7, Bootstrap, CakePHP, MySQL, MongoDB, jQuery, React.',
-	},
-	{
-		name: 'DMXLAB',
-		role: 'Full Stack Developer',
-		period: '01/2021 – 03/2021',
-		description: 'Management software development. Stack: CakePHP, jQuery.',
+			'Core member of an in-house dev team maintaining and extending proprietary business applications, covering both frontend and backend responsibilities.',
 	},
 ];

@@ -24,6 +24,7 @@ import {
 	SiVite,
 	SiVitest,
 	SiEslint,
+	SiGithubcopilot,
 } from 'react-icons/si';
 import { FaAws } from 'react-icons/fa6';
 import { MdCode } from 'react-icons/md';
@@ -32,7 +33,7 @@ export type TechItem = {
 	name: string;
 	icon: IconType;
 	color: string;
-	category: 'Frontend' | 'Backend' | 'Database' | 'Tools';
+	category: 'Frontend' | 'Backend' | 'Database' | 'Tools' | 'AI';
 };
 
 export const techStack: TechItem[] = [
@@ -67,4 +68,8 @@ export const techStack: TechItem[] = [
 	{ name: 'Vite', icon: SiVite, color: '#646CFF', category: 'Tools' },
 	{ name: 'Vitest', icon: SiVitest, color: '#6E9F18', category: 'Tools' },
 	{ name: 'ESLint', icon: SiEslint, color: '#4B32C3', category: 'Tools' },
+	// AI
+	{ name: 'GitHub Copilot', icon: SiGithubcopilot, color: '#000000', category: 'AI' },
+	{ name: 'OpenCode', icon: MdCode, color: '#6366f1', category: 'AI' },
+	{ name: 'OpenSpec', icon: MdCode, color: '#f97316', category: 'AI' },
 ];
