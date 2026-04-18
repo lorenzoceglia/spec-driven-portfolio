@@ -23,7 +23,6 @@ This approach ensures better planning, clearer requirements, and easier collabor
 spec-driven-demo/
 ├── lorenzo_ceglia/        # The actual React + Vite app
 ├── openspec/              # OpenSpec framework folder (specs & changes)
-├── .opencode/             # OpenCode customization (skills & commands)
 └── README.md
 ```
 
