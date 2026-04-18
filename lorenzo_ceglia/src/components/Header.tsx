@@ -1,21 +1,19 @@
-import { ReactNode } from 'react';
-
-interface HeaderProps {
-  children: ReactNode;
-  className?: string;
-}
+type HeaderProps = {
+	name?: string;
+};
 
 /**
- * Header component
- * 
- * A semantic header element that serves as the top page header.
- * Accepts children and optional className for customization.
- * Styled with Tailwind CSS for padding, background, and border.
+ * Header
+ *
+ * Minimal decorative bar. Name left-aligned. No children slot —
+ * the header has a fixed, known shape for a personal portfolio.
  */
-export function Header({ children, className = '' }: HeaderProps) {
-  return (
-    <header className={`bg-slate-800 text-white px-6 py-4 border-b border-slate-700 ${className}`}>
-      {children}
-    </header>
-  );
+export function Header({ name = 'Lorenzo Ceglia' }: HeaderProps) {
+	return (
+		<header className="sticky top-0 z-10 bg-white/90 backdrop-blur-sm border-b border-slate-100 px-6 py-4">
+			<span className="text-sm font-semibold tracking-widest text-slate-400 uppercase">
+				{name}
+			</span>
+		</header>
+	);
 }
