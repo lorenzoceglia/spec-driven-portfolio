@@ -1,9 +1,4 @@
-# filter-tabs Specification
-
-## Purpose
-Horizontally scrollable pill-tab bar used to filter grids by category. Receives tabs and active state from the parent; fires a callback on selection.
-
-## Requirements
+## MODIFIED Requirements
 
 ### Requirement: FilterTabs renders a list of tab buttons
 The `FilterTabs` component SHALL accept `tabs: string[]`, `activeTab: string`, `onTabChange: (tab: string) => void`, and `orientation: 'horizontal' | 'vertical'` props (default: `'horizontal'`). It SHALL render one button per tab entry and visually distinguish the active tab. In `horizontal` orientation the layout is a scrollable row; in `vertical` orientation the layout is a stacked column with full-width pills.
@@ -20,26 +15,7 @@ The `FilterTabs` component SHALL accept `tabs: string[]`, `activeTab: string`, `
 - **WHEN** `FilterTabs` renders with `orientation="vertical"`
 - **THEN** pills are arranged in a single column, each spanning the full width of the component
 
-### Requirement: FilterTabs hides empty tabs
-The parent section SHALL derive the `tabs` array from actual data, passing only tabs that have at least one matching item. `FilterTabs` SHALL render only the tabs it receives — it has no knowledge of item counts.
-
-#### Scenario: Tab with zero items is not rendered
-- **WHEN** the data contains only items of type "library" and no "contribution" items
-- **THEN** a "Contributions" tab does not appear in the rendered output
-
-### Requirement: FilterTabs is mobile-friendly
-The tab list SHALL be horizontally scrollable on small viewports without wrapping or overflowing the layout.
-
-#### Scenario: Tabs scroll on mobile
-- **WHEN** `FilterTabs` renders on a viewport narrower than 640px with 5 tabs
-- **THEN** tabs are displayed in a single scrollable row with no layout overflow
-
-### Requirement: FilterTabs has a Storybook story
-The `FilterTabs` component SHALL have a `FilterTabs.stories.tsx` file with at least one story.
-
-#### Scenario: Story renders without errors
-- **WHEN** Storybook loads the FilterTabs story
-- **THEN** the component renders with example tabs and an active selection
+## ADDED Requirements
 
 ### Requirement: WorkedWithSection uses two-column layout on desktop
 On viewports ≥ `md` breakpoint, `WorkedWithSection` SHALL render `FilterTabs` in a left sidebar column (~144px wide, `flex-shrink-0`) and `BubblePack` in a `flex-1` right column. On viewports < `md`, the layout SHALL be a single column with `FilterTabs` above `BubblePack` in horizontal orientation.

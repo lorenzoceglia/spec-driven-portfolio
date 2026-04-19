@@ -41,12 +41,16 @@ When a set card's `url` matches the `currentSetUrl` prop, the card SHALL render 
 - **WHEN** `currentSetUrl` does not match the card's `url`
 - **THEN** no active indicator is visible on the card
 
-### Requirement: Clicking a SetCard triggers playback
-Each `SetCard` SHALL accept an `onPlay: (url: string) => void` callback. Clicking the card or its play button SHALL call `onPlay` with the set's `url`.
+### Requirement: SetCard click triggers playback reliably
+Clicking any `SetCard` SHALL always trigger audio playback, including the first ever click on any card.
 
-#### Scenario: Click fires onPlay
-- **WHEN** the user clicks a `SetCard`
-- **THEN** `onPlay` is called with the corresponding `DJSet.url`
+#### Scenario: First ever click on any set
+- **WHEN** the user clicks a `SetCard` for the first time after page load
+- **THEN** audio begins playing for that set within one SoundCloud READY cycle
+
+#### Scenario: Click on already-loaded set
+- **WHEN** the user clicks the set whose URL matches the iframe's currently loaded URL
+- **THEN** `play()` is called and audio resumes immediately without reloading the iframe
 
 ### Requirement: BSideSection and SetCard have Storybook stories
 Both `BSideSection` and `SetCard` components SHALL have `.stories.tsx` files with at least one story each.
@@ -65,3 +69,38 @@ Below the "B-SIDE" label, the `BSideSection` SHALL render a one-line tagline tha
 #### Scenario: Tagline is styled to match the dark section palette
 - **WHEN** `BSideSection` renders
 - **THEN** the tagline text uses a muted color consistent with the `slate-900` background (e.g., `slate-400`)
+
+### Requirement: Global text rendering is antialiased
+The `body` element in `index.css` SHALL have `-webkit-font-smoothing: antialiased`, `-moz-osx-font-smoothing: grayscale`, and `text-rendering: optimizeLegibility` applied.
+
+#### Scenario: Antialiasing applied globally
+- **WHEN** the page renders in a webkit or gecko browser
+- **THEN** text uses subpixel antialiasing and optimised legibility rendering
+
+### Requirement: FilterTabs active pill uses slate-900
+The active tab in `FilterTabs` SHALL use `bg-slate-900 text-white` instead of any indigo variant.
+
+#### Scenario: Active tab is black
+- **WHEN** a tab is active in FilterTabs
+- **THEN** the pill background is `slate-900` and text is white
+
+### Requirement: Cards use rounded-lg and border-slate-200
+All `Card` components SHALL use `rounded-lg` border radius and `border-slate-200` border color.
+
+#### Scenario: Card border radius is rounded-lg
+- **WHEN** a Card renders
+- **THEN** the border radius is `rounded-lg` (not `rounded-xl`)
+
+### Requirement: Company role label uses slate-700
+The role label inside each company card SHALL use `text-slate-700 font-medium` instead of any indigo color.
+
+#### Scenario: Role label is dark gray
+- **WHEN** a company card renders
+- **THEN** the role text is `slate-700`
+
+### Requirement: Open source language badge is an inverted monospace tag
+The language badge in `OpenSourceSection` SHALL use `bg-slate-900 text-white font-mono` styling.
+
+#### Scenario: Language badge is dark with white monospace text
+- **WHEN** an OS project card renders
+- **THEN** the language badge has a `slate-900` background and white monospace text
